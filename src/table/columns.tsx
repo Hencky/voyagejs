@@ -7,7 +7,7 @@ import type { ModalFormInstance } from '../form';
 import type { PluginsType } from '../plugins';
 import { parsePlugin, pluginStore } from '../plugins';
 import { toStringKey } from '../utils';
-import { FilterDropdown } from './FilterDropdown';
+import { FilterDropdown } from './filterDropdown';
 import type { ColumnType } from './interface';
 import type { TableStore } from './store';
 import { TableSearchStatus } from './store';
