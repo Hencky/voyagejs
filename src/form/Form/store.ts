@@ -265,16 +265,16 @@ export class FormStore<Values = any, P extends PluginsType = PluginsType>
       this.getField(effectName).forceUpdate();
     });
 
-    this.triggerReactions(value);
+    runInAction(() => {
+      this.triggerReactions(value);
+    });
   };
 
   triggerReactions(value: Values, ignoreValueChange = false) {
     if (this.inModal && this.modalOpenStatus === false) return;
-    runInAction(() => {
-      this.triggerChange(this.effects, value, (config, changeName) => {
-        const changeValue = this.getField(changeName)?.value;
-        this.reactionResults(config, changeValue, changeName, ignoreValueChange);
-      });
+    this.triggerChange(this.effects, value, (config, changeName) => {
+      const changeValue = this.getField(changeName)?.value;
+      this.reactionResults(config, changeValue, changeName, ignoreValueChange);
     });
   }
 
@@ -300,6 +300,8 @@ export class FormStore<Values = any, P extends PluginsType = PluginsType>
       const depValues = dependencies ? dependencies.map((depName) => this.getField(depName).value) : [];
 
       const triggerResultChange = (data: any) => {
+        // @ts-expect-error
+        if (isEqual(this.getField(effectName)[key], data)) return;
         // @ts-expect-error
         this.getField(effectName)[key] = data;
 
