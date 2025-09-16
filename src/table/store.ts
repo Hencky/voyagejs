@@ -101,17 +101,19 @@ export class TableStore<RecordType extends object = any> implements TableProps<R
 
   private setInitialPagination(props: TableProps<RecordType>) {
     const { pagination = {} } = props;
-    if (pagination === false) return;
     const { defaultCurrent, defaultPageSize } = pagination as TablePaginationConfig;
     this.initialPagination = {
       current: defaultCurrent ?? 1,
       pageSize: defaultPageSize ?? 10,
     };
-    this.pagination = {
-      ...this.initialPagination,
-      ...pagination,
-    };
+    this.pagination = pagination
+      ? {
+          ...this.initialPagination,
+          ...pagination,
+        }
+      : false;
   }
+
 
   refresh(params?: any): Promise<void> | undefined {
     if (!this.remoteDataSource) return;
